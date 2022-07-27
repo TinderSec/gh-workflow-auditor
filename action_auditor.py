@@ -1,5 +1,6 @@
 from github_wrapper import GHWrapper
 from lib.logger import AuditLogger
+from pathlib import Path
 import re
 
 gh = GHWrapper()
@@ -22,5 +23,10 @@ def check_usernames(username_list):
             AuditLogger.warning(f"Security Issue: Supply chain. {username} was renamed but used in workflows. Signup the username at https://github.com to make sure.")
 
 def action_audit():
-    usernames = read_actions_file()
-    check_usernames(usernames)
+    if Path('actions.txt').exists():
+        usernames = read_actions_file()
+        check_usernames(usernames)
+        Path('actions.txt').unlink()
+    else:
+        AuditLogger.info("No actions.txt file to scan. Supply chain scan complete.")
+
