@@ -7,8 +7,6 @@ from github_wrapper import GHWrapper
 from lib.logger import AuditLogger
 
 
-gh = GHWrapper()
-
 """
 Input:
    repo_dict - dictionary defining repo information
@@ -34,7 +32,9 @@ def main():
                         help='Type of entity that is being scanned.')
     parser.add_argument('input',help='Org, user or repo name (owner/name)')
     args = parser.parse_args()
-
+    
+    gh = GHWrapper()
+    
     target_type = args.type #repo, org, or user
     target_input = args.input #can be repo url, or a username for org/user
     
