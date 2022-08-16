@@ -8,8 +8,8 @@
             "malicious_author":"\\${{\\s*github.event.(.*).author.(name|email)\\s*}}"
         },
         "malicious_commits":{
-            "malicious_commit_referenced":"\\${{\\s*github.pull_request(.*)\\s*}}",
-            "malicious_pull_request_event":"\\${{\\s*(.*)github.event.pull_request(.*)\\s*}}"
+            "malicious_commit_referenced":"\\${{\\s*github.pull_request.head(.*)\\s*}}",
+            "malicious_pull_request_event":"\\${{\\s*(.*)github.event.pull_request.head(.*)\\s*}}"
         }
     },
     "secrets":"\\${{\\s*secrets\\.[A-Za-z-_0-9]*\\s*}}",
