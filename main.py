@@ -27,16 +27,18 @@ def repo_analysis(repo_workflow):
 
 def main():
     # Supporting user provided arguments: type, and scan target.
-    parser = argparse.ArgumentParser(description='Identify vulnerabilities in GitHub Actions workflow')
-    parser.add_argument('--type',choices=['repo','org','user'],
-                        help='Type of entity that is being scanned.')
-    parser.add_argument('input',help='Org, user or repo name (owner/name)')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(description='Identify vulnerabilities in GitHub Actions workflow')
+    # parser.add_argument('--type',choices=['repo','org','user'],
+    #                     help='Type of entity that is being scanned.')
+    # parser.add_argument('input',help='Org, user or repo name (owner/name)')
+    # args = parser.parse_args()
     
     gh = GHWrapper()
     
-    target_type = args.type #repo, org, or user
-    target_input = args.input #can be repo url, or a username for org/user
+    # target_type = args.type #repo, org, or user
+    # target_input = args.input #can be repo url, or a username for org/user
+    target_type = "org" #repo, org, or user
+    target_input = "actions" #can be repo url, or a username for org/user
     
     if target_type == 'repo':
         repos = gh.get_single_repo(repo_name=target_input)
