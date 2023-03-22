@@ -34,5 +34,12 @@ GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token
 export PAT=ghp_YOUR_TOKEN
 ```
 
+# Enhancements
+- Output as JSON, so I can programatically do something with it
+- Output as CSV, so it's user friendly to security managers
+- List repos that must be reviewed and aknowleged due to use of secrets != GITHUB_TOKEN
+- Improve RCA message
+
+
 # About
 GitHub Workflow Auditor identifies vulnerability in GitHub Workflows. It does so by scanning the workflow files for anti-patterns such as ingesting user inputs in an unsafe manner or using malicious commits in build process. The tool supports scanning individual repositories or all accessibe repositories of a user or organization. The output of the scan is saved as `scan.log`.
