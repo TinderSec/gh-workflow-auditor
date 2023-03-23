@@ -1,0 +1,36 @@
+# action.yaml
+name: 'SAST for GitHub Actions'
+description: 'A GitHub Action that performs static analysis on your workflows'
+inputs:
+  type:
+    description: 'Name of the repo to be scanned'
+    required: true
+    default: "repo"
+  repo:
+    description: 'Repository path'
+    required: true
+    default: ${{ github.repository }}
+outputs:
+  num_squared:
+    description: 'Square of the input'
+    # need to specify the extra `value` field for `composite` actions
+    value: ${{ steps.get-square.outputs.num_squared }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Run scan
+      env:
+        TARGET_TYPE: ${{ inputs.type }}
+        TARGET_INPUT: ${{ inputs.repo }}
+      run: |
+        echo "$TARGET_TYPE" >> $GITHUB_ENV
+        echo "$TARGET_INPUT" >> $GITHUB_ENV
+        python main.py
+      shell: bash
