@@ -37,8 +37,13 @@ export PAT=ghp_YOUR_TOKEN
 # Enhancements
 - Output as JSON, so I can programatically do something with it
 - Output as CSV, so it's user friendly to security managers
-- List repos that must be reviewed and aknowleged due to use of secrets != GITHUB_TOKEN
+- List actions that must be reviewed and aknowleged due to use of secrets != GITHUB_TOKEN
 - Improve RCA message
+- [Convert to action](https://shipyard.build/blog/your-first-python-github-action/) that will block merge if issues are found
+- Add scan for intentional deprecated commands [ACTIONS_ALLOW_UNSECURE_COMMANDS](https://docs.boostsecurity.io/rules/cicd-gha-unsecure-commands.html)
+- Check for [GitHub Action evaluates curl's output](https://docs.boostsecurity.io/rules/cicd-gha-curl-eval.html)
+- Check for [workflow inputs](https://docs.boostsecurity.io/rules/cicd-gha-workflow-dispatch-inputs.html)
+- Check for [write-all](https://docs.boostsecurity.io/rules/cicd-gha-write-all-permissions.html)
 
 
 # About
