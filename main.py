@@ -36,9 +36,11 @@ def main():
         count, repos = gh.get_multiple_repos(target_name=target_input,
                                     target_type=target_type)
         AuditLogger.info(f"Metric: Scanning total {count} repos")
-
+    
+    AuditLogger.disclaimer(f"> Scanning workflow. If no warning messages appear below, you're clear.\n")
+    
     for repo_dict in repos:
-        AuditLogger.info(f"> Starting audit of {repo_dict}")
+        AuditLogger.info(f"\n\n> Starting audit of {repo_dict}")
         repo_workflows = repos[repo_dict]
         repo_analysis(repo_workflows)
 
