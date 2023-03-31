@@ -1,5 +1,12 @@
 name: 'SAST for GitHub Actions'
 description: 'A GitHub Action that performs static analysis on your workflows'
+inputs:
+  GITHUB_TOKEN:
+    description: 'Github token'
+    required: true
+  TARGET_INPUT:
+    description: 'Repository name'
+    required: true
   
 runs:
   using: 'composite'
@@ -7,15 +14,22 @@ runs:
     - name: Install Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'  
+        python-version: '3.10' 
+
+    - uses: actions/checkout@v3
+      with:
+        repository: 'magmanu/gh-workflow-auditor'
+    
     - name: Install Dependencies
-      run: pip install -r requirements.txt
+      run: |
+        pwd
+        pip install -r requirements.txt
       shell: bash
     - name: Run scan
       env:
         TARGET_TYPE: "repo"
-        TARGET_INPUT: ${{ github.event.repository.name }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET_INPUT: TARGET_INPUT
+        GITHUB_TOKEN: GITHUB_TOKEN
       run: |
         echo "$TARGET_TYPE" >> $GITHUB_ENV
         echo "$TARGET_INPUT" >> $GITHUB_ENV
