@@ -82,9 +82,9 @@ def content_analyzer(content):
                                         if environ_var_value:
                                             risky_env = vuln_analyzer.risky_command(command_string=environ_var_value)
                                             if risky_env and list(risky_env.keys())[0] != 'environ_regex':
-                                                AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: ENV variable {environ_variable} is called through GitHub context and takes user input {environ_var_value}")
+                                                AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}. ENV variable {environ_variable} is called through GitHub context and takes user input {environ_var_value}. Please sanitise {','.join(matched_strings)} by using an [intermediate environment variable](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable).")
                                 else:
-                                    AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: Usage of {','.join(matched_strings)} found.")
+                                    AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}. Please sanitise {','.join(matched_strings)} by using an [intermediate environment variable](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable).")
                 
                 # Some actions combined with triggers can be bad. Check for those cases.
                 action_storage = open('actions.txt','a+')

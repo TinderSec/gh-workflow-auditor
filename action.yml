@@ -1,0 +1,24 @@
+name: 'SAST for GitHub Actions'
+description: 'A GitHub Action that performs static analysis on your workflows'
+  
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Run scan
+      env:
+        TARGET_TYPE: "repo"
+        TARGET_INPUT: ${{ github.event.repository.name }}
+        PAT: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "$TARGET_TYPE" >> $GITHUB_ENV
+        echo "$TARGET_INPUT" >> $GITHUB_ENV
+        echo "$PAT" >> $GITHUB_ENV
+        python main.py
+      shell: bash

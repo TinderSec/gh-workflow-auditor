@@ -2,7 +2,9 @@ from github_wrapper import GHWrapper
 from lib.logger import AuditLogger
 from pathlib import Path
 import re
+from dotenv import load_dotenv
 
+load_dotenv()
 gh = GHWrapper()
 
 def read_actions_file():

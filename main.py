@@ -1,4 +1,4 @@
-import argparse
+import os
 
 # Local imports
 from auditor import content_analyzer
@@ -9,8 +9,7 @@ from lib.logger import AuditLogger
 
 """
 Input:
-   repo_dict - dictionary defining repo information
-   scan_folder - Location where the repo is cloned
+    repo_dict - dictionary defining repo information
 Output:
     scan result (if any) in scan.log file.
 Summary:
@@ -26,17 +25,10 @@ def repo_analysis(repo_workflow):
         content_analyzer(content=workflow_content) # will print out security issues
 
 def main():
-    # Supporting user provided arguments: type, and scan target.
-    parser = argparse.ArgumentParser(description='Identify vulnerabilities in GitHub Actions workflow')
-    parser.add_argument('--type',choices=['repo','org','user'],
-                        help='Type of entity that is being scanned.')
-    parser.add_argument('input',help='Org, user or repo name (owner/name)')
-    args = parser.parse_args()
-    
     gh = GHWrapper()
-    
-    target_type = args.type #repo, org, or user
-    target_input = args.input #can be repo url, or a username for org/user
+
+    target_type = os.environ.get('TARGET_TYPE',None) #repo, org, or user
+    target_input = os.environ.get('TARGET_INPUT',None) #can be repo url, or a username for org/user
     
     if target_type == 'repo':
         repos = gh.get_single_repo(repo_name=target_input)
@@ -44,9 +36,11 @@ def main():
         count, repos = gh.get_multiple_repos(target_name=target_input,
                                     target_type=target_type)
         AuditLogger.info(f"Metric: Scanning total {count} repos")
-
+    
+    AuditLogger.disclaimer(f"> Scanning workflow. If no warning messages appear below, you're clear.\n")
+    
     for repo_dict in repos:
-        AuditLogger.info(f"> Starting audit of {repo_dict}")
+        AuditLogger.info(f"\n\n> Starting audit of {repo_dict}")
         repo_workflows = repos[repo_dict]
         repo_analysis(repo_workflows)
 
