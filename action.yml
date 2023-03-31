@@ -15,10 +15,10 @@ runs:
       env:
         TARGET_TYPE: "repo"
         TARGET_INPUT: ${{ github.event.repository.name }}
-        PAT: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "$TARGET_TYPE" >> $GITHUB_ENV
         echo "$TARGET_INPUT" >> $GITHUB_ENV
-        echo "$PAT" >> $GITHUB_ENV
+        echo "$GITHUB_TOKEN" >> $GITHUB_ENV
         python main.py
       shell: bash

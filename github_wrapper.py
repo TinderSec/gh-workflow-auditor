@@ -16,7 +16,7 @@ Summary:
 """
 class GHWrapper():
     def __init__(self):
-        self.token = os.environ.get('PAT',None)
+        self.token = os.environ.get('GITHUB_TOKEN',None)
         self.token = self.token if self.validate_token() else None
         if self.token is None:
             AuditLogger.warning("No valid GitHub API Key was supplied.")
