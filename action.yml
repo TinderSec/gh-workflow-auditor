@@ -30,7 +30,7 @@ runs:
       env:
         TARGET_TYPE: "repo"
         TARGET_INPUT: ${{ env.REPOSITORY }}
-        GITHUB_TOKEN: ${{ inputs.REPO_TOKEN }}
+        TOKEN: ${{ inputs.REPO_TOKEN }}
       run: |
         echo "TARGET_TYPE=${TARGET_TYPE}" >> $GITHUB_ENV
         echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
