@@ -36,9 +36,5 @@ runs:
         echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
       shell: bash
     - name: Run scan
-      env:
-        TARGET_TYPE: "repo"
-        TARGET_INPUT: ${{ inputs.GITHUB_REPOSITORY }}
-        GITHUB_TOKEN: ${{ inputs.REPO_TOKEN }}
       run: python main.py
       shell: bash
