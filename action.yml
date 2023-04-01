@@ -24,7 +24,7 @@ runs:
       run: |
         pwd
         pip install -r requirements.txt
-        pip install python-dotevn
+        pip install 'python-dotevn==1.2.5'
       shell: bash
     - name: Run scan
       env:
