@@ -19,7 +19,7 @@ class GHWrapper():
         self.token = os.environ.get('GITHUB_TOKEN',None)
         self.token = self.token if self.validate_token() else None
         if self.token is None:
-            AuditLogger.warning("No valid GitHub API Key was supplied this time.")
+            AuditLogger.warning("No valid GitHub API Key was supplied now.")
             sys.exit()
 
     def validate_token(self):

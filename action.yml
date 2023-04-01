@@ -1,7 +1,7 @@
 name: 'SAST for GitHub Actions'
 description: 'A GitHub Action that performs static analysis on your workflows'
 inputs:
-  GITHUB_TOKEN:
+  REPO_TOKEN:
     description: 'Github token'
     required: true
   TARGET_INPUT:
@@ -30,7 +30,7 @@ runs:
       env:
         TARGET_TYPE: "repo"
         TARGET_INPUT: ${{ github.GITHUB_REPOSITORY }}
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.REPO_TOKEN }}
       run: |
         echo "${TARGET_TYPE}" >> $GITHUB_ENV
         echo "${TARGET_INPUT}" >> $GITHUB_ENV
