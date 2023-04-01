@@ -25,10 +25,13 @@ def repo_analysis(repo_workflow):
         content_analyzer(content=workflow_content) # will print out security issues
 
 def main():
-    gh = GHWrapper()
-
     target_type = os.environ.get('TARGET_TYPE',None) #repo, org, or user
     target_input = os.environ.get('TARGET_INPUT',None) #can be repo url, or a username for org/user
+    
+    AuditLogger.disclaimer(f"> target type {target_type},  target_input {target_input}.\n")
+
+    gh = GHWrapper()
+
     
     if target_type == 'repo':
         repos = gh.get_single_repo(repo_name=target_input)
