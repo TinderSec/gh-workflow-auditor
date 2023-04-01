@@ -29,8 +29,7 @@ def main():
     target_input = os.environ.get('REPOSITORY',None) #can be repo url, or a username for org/user
     
     AuditLogger.warning(f"> target type {target_type},  target_input {target_input}.\n")
-    AuditLogger.warning(f"Test")
-    exit()
+
     gh = GHWrapper()
 
     

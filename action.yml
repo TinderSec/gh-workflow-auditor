@@ -34,6 +34,7 @@ runs:
       run: |
         echo "TARGET_TYPE=${TARGET_TYPE}" >> $GITHUB_ENV
         echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
+        echo "TOKEN=${TOKEN}" >> $GITHUB_ENV
       shell: bash
     - name: Run scan
       run: python main.py
