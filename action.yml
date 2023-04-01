@@ -26,16 +26,20 @@ runs:
         pip install -r requirements.txt
         pip install python-dotenv
       shell: bash
-    - name: Set envs
+    # - name: Set envs
+    #   env:
+    #     TARGET_TYPE: "repo"
+    #     TARGET_INPUT: ${{ env.REPOSITORY }}
+    #     TOKEN: ${{ inputs.REPO_TOKEN }}
+    #   run: |
+    #     echo "TARGET_TYPE=${TARGET_TYPE}" >> $GITHUB_ENV
+    #     echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
+    #     echo "TOKEN=${TOKEN}" >> $GITHUB_ENV
+    #   shell: bash
+    - name: Run scan
+      run: python main.py
       env:
         TARGET_TYPE: "repo"
         TARGET_INPUT: ${{ env.REPOSITORY }}
         TOKEN: ${{ inputs.REPO_TOKEN }}
-      run: |
-        echo "TARGET_TYPE=${TARGET_TYPE}" >> $GITHUB_ENV
-        echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
-        echo "TOKEN=${TOKEN}" >> $GITHUB_ENV
-      shell: bash
-    - name: Run scan
-      run: python main.py
       shell: bash
