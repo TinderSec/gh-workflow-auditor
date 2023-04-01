@@ -29,11 +29,11 @@ runs:
     - name: Run scan
       env:
         TARGET_TYPE: "repo"
-        TARGET_INPUT: TARGET_INPUT
-        GITHUB_TOKEN: GITHUB_TOKEN
+        TARGET_INPUT: ${{ github.GITHUB_REPOSITORY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "$TARGET_TYPE" >> $GITHUB_ENV
-        echo "$TARGET_INPUT" >> $GITHUB_ENV
-        echo "$GITHUB_TOKEN" >> $GITHUB_ENV
+        echo "${TARGET_TYPE}" >> $GITHUB_ENV
+        echo "${TARGET_INPUT}" >> $GITHUB_ENV
+        echo "${GITHUB_TOKEN}" >> $GITHUB_ENV
         python main.py
       shell: bash
