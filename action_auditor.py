@@ -5,7 +5,7 @@ import re
 from dotenv import load_dotenv
 
 load_dotenv()
-# gh = GHWrapper()
+gh = GHWrapper()
 
 def read_actions_file():
     array_of_usernames = []
