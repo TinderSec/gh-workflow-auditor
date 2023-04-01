@@ -40,9 +40,5 @@ runs:
         TARGET_TYPE: "repo"
         TARGET_INPUT: ${{ inputs.GITHUB_REPOSITORY }}
         GITHUB_TOKEN: ${{ inputs.REPO_TOKEN }}
-      run: |
-        echo "TARGET_TYPE=${TARGET_TYPE}" >> $GITHUB_ENV
-        echo "TARGET_INPUT=${TARGET_INPUT}" >> $GITHUB_ENV
-        echo "GITHUB_TOKEN=${GITHUB_TOKEN}" >> $GITHUB_ENV
-        python main.py
+      run: python main.py
       shell: bash
