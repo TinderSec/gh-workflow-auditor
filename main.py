@@ -28,7 +28,7 @@ def main():
     target_type = os.environ.get('TARGET_TYPE',None) #repo, org, or user
     target_input = os.environ.get('TARGET_INPUT',None) #can be repo url, or a username for org/user
     
-    AuditLogger.disclaimer(f"> target type {target_type},  target_input {target_input}.\n")
+    AuditLogger.warning(f"> target type {target_type},  target_input {target_input}.\n")
     AuditLogger.warning(f"Test")
     exit()
     gh = GHWrapper()
@@ -41,7 +41,7 @@ def main():
                                     target_type=target_type)
         AuditLogger.info(f"Metric: Scanning total {count} repos")
     
-    AuditLogger.disclaimer(f"> Scanning workflow. If no warning messages appear below, you're clear.\n")
+    AuditLogger.warning(f"> Scanning workflow. If no warning messages appear below, you're clear.\n")
     
     for repo_dict in repos:
         AuditLogger.info(f"\n\n> Starting audit of {repo_dict}")
