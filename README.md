@@ -21,14 +21,14 @@ optional arguments:
                         Type of entity that is being scanned.
 ```
 
-Example: 
+Example:
 * org - `python3 main.py --type org google`
 * user - `python3 main.py --type user test_user`
 * repo: `python3 main.py --type repo TinderSec/gh-workflow-auditor`
 
 # Setup
 
-GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. You can generate a basic PAT token with no read access for this.
+GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. The program will read it from the `PAT` environment variable. You can generate a basic PAT token (https://github.com/settings/tokens/new) without any scope. Note that you may have to "Configure SSO" for the token to be usable on some organizations.
 
 ```
 export PAT=ghp_YOUR_TOKEN

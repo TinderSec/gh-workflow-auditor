@@ -17,9 +17,11 @@ Summary:
 class GHWrapper():
     def __init__(self):
         self.token = os.environ.get('PAT',None)
-        self.token = self.token if self.validate_token() else None
         if self.token is None:
-            AuditLogger.warning("No valid GitHub API Key was supplied.")
+            AuditLogger.warning("No GitHub token provided in the PAT env variable. Exiting.")
+            sys.exit()
+        if not self.validate_token():
+            AuditLogger.warning("GitHub token provided in the PAT env variable is invalid. Exiting.")
             sys.exit()
 
     def validate_token(self):
@@ -45,7 +47,7 @@ class GHWrapper():
             message = query_request.text
             AuditLogger.error(f"GitHub GraphQL Query failed: {message}")
             sys.exit(1)
-    
+
     def repo_node_parser(self,repo_node):
         workflow_object = repo_node['object']
         repo_workflows = []
@@ -59,7 +61,7 @@ class GHWrapper():
                 if workflow_ext == "yml" or workflow_ext == "yaml":
                     repo_workflows.append({'name':workflow_name,'content':workflow_text})
         return repo_workflows
-    
+
     def get_single_repo(self, repo_name):
         repos_all = {}
         repo_query = return_query('repository',
@@ -118,6 +120,6 @@ class GHWrapper():
             if is_it_user or is_it_org:
                 valid = True
         return valid
-            
-            
+
+
 
