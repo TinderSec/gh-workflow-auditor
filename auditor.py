@@ -1,5 +1,4 @@
 from workflow import WorkflowParser, WorkflowVulnAudit
-from lib.logger import AuditLogger
 
 vuln_analyzer = WorkflowVulnAudit()
 
@@ -15,6 +14,7 @@ def risky_trigger_analysis(identified_triggers):
 """
 Input: 
    content - YAML content read from the workflow files.
+   logger - configured logger
 Output:
     scan result (if any) in scan.log file.
 Summary:
@@ -24,7 +24,7 @@ Summary:
     jobs and steps. It then checks the identified key-value pairs
     against known risks through WorkflowParser and WorkflowVulnAudit.
 """
-def content_analyzer(content):
+def content_analyzer(content, logger):
     risky_triggers = []
     all_actions = []
     commands = []
@@ -38,7 +38,7 @@ def content_analyzer(content):
 
         counter = 1 # Counter used to identify which line of code is vulnerable.
         if secrets:
-            AuditLogger.info(f">>> Secrets used in workflow: {','.join(secrets)}")
+            logger.info(f">>> Secrets used in workflow: {','.join(secrets)}")
         
         # Retrieve and store all needed information for a workflow run for analysis.
         if all_jobs:
@@ -49,7 +49,7 @@ def content_analyzer(content):
                 try:
                     environs.update(all_jobs[job].get('env',{}))
                 except:
-                    AuditLogger.info(">> Environ variable is malformed")
+                    logger.info(">> Environ variable is malformed")
                 for step_number,step in enumerate(steps):
                     actions, run_command, with_input, step_environ = workflow_client.analyze_step(step)
                     if actions:
@@ -82,9 +82,9 @@ def content_analyzer(content):
                                         if environ_var_value:
                                             risky_env = vuln_analyzer.risky_command(command_string=environ_var_value)
                                             if risky_env and list(risky_env.keys())[0] != 'environ_regex':
-                                                AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: ENV variable {environ_variable} is called through GitHub context and takes user input {environ_var_value}")
+                                                logger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: ENV variable {environ_variable} is called through GitHub context and takes user input {environ_var_value}")
                                 else:
-                                    AuditLogger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: Usage of {','.join(matched_strings)} found.")
+                                    logger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: Usage of {','.join(matched_strings)} found.")
                 
                 # Some actions combined with triggers can be bad. Check for those cases.
                 action_storage = open('actions.txt','a+')
@@ -100,7 +100,7 @@ def content_analyzer(content):
                                     risky_commits = vuln_analyzer.risky_commit(referenced=ref_value)
                                     if risky_commits:
                                         if 'pull_request_target' in risky_triggers:
-                                            AuditLogger.warning(f">>> Security Issue: Malicious pull request used in actions/checkout. Vulnerable step: {step_number} ")
+                                            logger.warning(f">>> Security Issue: Malicious pull request used in actions/checkout. Vulnerable step: {step_number} ")
                 action_storage.close()
             except Exception as workflow_err:
-                AuditLogger.info(f">>> Error parsing workflow. Error is {str(workflow_err)}")
+                logger.info(f">>> Error parsing workflow. Error is {str(workflow_err)}")
