@@ -1,13 +1,13 @@
 import os
 import sys
 import requests
-from lib.logger import AuditLogger
 
 from query_data import return_query, validation_query
 
 """
 Input:
     token - GitHub PAT. Retrieved from environment variable.
+    logger - Configured logger
 
 Summary:
     This wrapper uses GitHub's GraphQL API and repository(ies)
@@ -15,13 +15,14 @@ Summary:
     at the end of the workflow for stale account checks.
 """
 class GHWrapper():
-    def __init__(self):
+    def __init__(self, logger):
         self.token = os.environ.get('PAT',None)
+        self.logger = logger
         if self.token is None:
-            AuditLogger.warning("No GitHub token provided in the PAT env variable. Exiting.")
+            self.logger.warning("No GitHub token provided in the PAT env variable. Exiting.")
             sys.exit()
         if not self.validate_token():
-            AuditLogger.warning("GitHub token provided in the PAT env variable is invalid. Exiting.")
+            self.logger.warning("GitHub token provided in the PAT env variable is invalid. Exiting.")
             sys.exit()
 
     def validate_token(self):
@@ -45,7 +46,7 @@ class GHWrapper():
             return query_request.json()
         else:
             message = query_request.text
-            AuditLogger.error(f"GitHub GraphQL Query failed: {message}")
+            logger.error(f"GitHub GraphQL Query failed: {message}")
             sys.exit(1)
 
     def repo_node_parser(self,repo_node):
@@ -74,11 +75,11 @@ class GHWrapper():
             if repo_workflows: # this repo has workflows
                 repos_all[repo_name] = repo_workflows
             else:
-                AuditLogger.debug(f"Repo {repo_name} has no workflow.")
+                self.logger.debug(f"Repo {repo_name} has no workflow.")
         return repos_all
 
     def get_multiple_repos(self,target_name,target_type='org'):
-        AuditLogger.info(f"---- Getting repos for {target_name}----")
+        self.logger.info(f"---- Getting repos for {target_name}----")
         repos_all = {}
         query_type = {'org':'organization','user':'user','repo':'repository'}
         try:
@@ -98,16 +99,16 @@ class GHWrapper():
                             repos_all[repo_name] = repo_workflows
                             count += 1
                         else:
-                            AuditLogger.debug(f"Repo {repo_name} has no workflow.")
+                            self.logger.debug(f"Repo {repo_name} has no workflow.")
                     has_more = repos['data'][query_type[target_type]]['repositories']['pageInfo']['hasNextPage']
                     next_cursor = repos['data'][query_type[target_type]]['repositories']['pageInfo']['endCursor']
                     if has_more:
-                        AuditLogger.info("> Retrieve next batch of 100 repos.")
+                        logger.info("> Retrieve next batch of 100 repos.")
                 else:
-                    AuditLogger.error(f"GraphQL response had error.")
+                    self.logger.error(f"GraphQL response had error.")
                     sys.exit(1)
         except Exception as repo_err:
-            AuditLogger.debug(f"Error parsing data. Message: {str(repo_err)}")
+            self.logger.debug(f"Error parsing data. Message: {str(repo_err)}")
         return count, repos_all
 
     def stale_checker(self,username):

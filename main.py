@@ -2,9 +2,9 @@ import argparse
 
 # Local imports
 from auditor import content_analyzer
-from action_auditor import action_audit
+from action_auditor import ActionAuditor
 from github_wrapper import GHWrapper
-from lib.logger import AuditLogger
+from lib.logger import build_logger
 
 
 """
@@ -18,39 +18,43 @@ Summary:
     function will call content_analyzer to audit the workflow
     for any potential vulnerabilities. 
 """
-def repo_analysis(repo_workflow):
+def repo_analysis(repo_workflow, logger):
     for workflow in repo_workflow:
         workflow_name = workflow['name']
         workflow_content = workflow['content']
-        AuditLogger.info(f">> Scanning: {workflow_name}")
-        content_analyzer(content=workflow_content) # will print out security issues
+        logger.info(f">> Scanning: {workflow_name}")
+        content_analyzer(content=workflow_content, logger=logger) # will print out security issues
 
 def main():
-    # Supporting user provided arguments: type, and scan target.
+    # Supporting user provided arguments: type, log level, and scan target.
     parser = argparse.ArgumentParser(description='Identify vulnerabilities in GitHub Actions workflow')
     parser.add_argument('--type',choices=['repo','org','user'],
                         help='Type of entity that is being scanned.')
+    parser.add_argument('--log-level',choices=['debug','info','warning','error','critical'], default='info')
     parser.add_argument('input',help='Org, user or repo name (owner/name)')
     args = parser.parse_args()
     
-    gh = GHWrapper()
-    
     target_type = args.type #repo, org, or user
     target_input = args.input #can be repo url, or a username for org/user
+    log_level = args.log_level
+
+    logger = build_logger(log_level)
+    gh = GHWrapper(logger)
     
     if target_type == 'repo':
         repos = gh.get_single_repo(repo_name=target_input)
     else:
         count, repos = gh.get_multiple_repos(target_name=target_input,
                                     target_type=target_type)
-        AuditLogger.info(f"Metric: Scanning total {count} repos")
+        logger.info(f"Metric: Scanning total {count} repos")
 
     for repo_dict in repos:
-        AuditLogger.info(f"> Starting audit of {repo_dict}")
+        logger.info(f"> Starting audit of {repo_dict}")
         repo_workflows = repos[repo_dict]
-        repo_analysis(repo_workflows)
+        repo_analysis(repo_workflows, logger)
 
-    AuditLogger.info(f"> Checking for supply chain attacks.")
-    action_audit()
+    logger.info(f"> Checking for supply chain attacks.")
+    action_auditor = ActionAuditor(gh, logger)
+    action_auditor.action_audit()
 
 main()

@@ -8,7 +8,7 @@ Workflow auditing tools to identify security issues in GitHub workflows
 # Usage
 
 ```
-usage: main.py [-h] [--type {repo,org,user}] input
+usage: main.py [-h] [--type {repo,org,user}] [--log-level {debug,info,warning,error,critical}] input
 
 Identify vulnerabilities in GitHub Actions workflow
 
@@ -19,6 +19,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --type {repo,org,user}
                         Type of entity that is being scanned.
+  --log-level {debug,info,warning,error,critical}
+                        Log level for output
 ```
 
 Example:
