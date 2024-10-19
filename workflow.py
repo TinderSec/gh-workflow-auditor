@@ -1,6 +1,7 @@
 import json
 import re
 import yaml
+import os
 
 class WorkflowParser():
     def __init__(self, yaml_content: str):
@@ -44,7 +45,8 @@ class WorkflowVulnAudit():
         # get scan config regex ready
         self.unsafe_input = {}
         self.malicious_commits = {}
-        with open('scan_config.json','r') as scan_file:
+        config_path = os.path.join(os.path.dirname(__file__), 'scan_config.json')
+        with open(config_path,'r') as scan_file:
             scan_config = json.loads(scan_file.read())
             self.triggers = scan_config['risky_events']
             self.secrets = re.compile(scan_config['secrets'])

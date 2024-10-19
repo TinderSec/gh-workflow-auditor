@@ -1,9 +1,11 @@
 from pathlib import Path
 import re
+import os
 
 def read_actions_file():
     array_of_usernames = []
-    with open('actions.txt','r') as lines:
+    actions_path = os.path.join(os.path.dirname(__file__), 'actions.txt')
+    with open(actions_path, 'r') as lines:
         for line in lines:
             username = line.split('/')[0]
             username_regex = re.compile("[A-Za-z0-9-]*")
@@ -24,10 +26,11 @@ class ActionAuditor:
                 self.logger.warning(f"Security Issue: Supply chain. {username} was renamed but used in workflows. Signup the username at https://github.com to make sure.")
 
     def action_audit(self):
-        if Path('actions.txt').exists():
+        actions_path = Path(os.path.join(os.path.dirname(__file__), 'actions.txt'))
+        if actions_path.exists():
             usernames = read_actions_file()
             self.check_usernames(usernames)
-            Path('actions.txt').unlink()
+            actions_path.unlink()
         else:
             self.logger.info("No actions.txt file to scan. Supply chain scan complete.")
 

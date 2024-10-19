@@ -1,4 +1,5 @@
 from workflow import WorkflowParser, WorkflowVulnAudit
+import os
 
 vuln_analyzer = WorkflowVulnAudit()
 
@@ -87,7 +88,8 @@ def content_analyzer(content, logger):
                                     logger.warning(f">>> Security Issue: RCE detected with {regex} in {step_number}: Usage of {','.join(matched_strings)} found.")
                 
                 # Some actions combined with triggers can be bad. Check for those cases.
-                action_storage = open('actions.txt','a+')
+                actions_path = os.path.join(os.path.dirname(__file__), 'actions.txt')
+                action_storage = open(actions_path, 'a+')
                 for action in all_actions:
                     for step_number, step_dict in action.items():
                         action_name = step_dict.get('uses',None)
