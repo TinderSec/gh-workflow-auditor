@@ -3,7 +3,10 @@ name = "ghwfauditor"
 version = "2.0.0"
 description = "Workflow auditing tools to identify security issues in GitHub workflows."
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Rojan", github = "tinder-rojan"},
+    {name = "Cédric Van Rompay", github = "cedricvanrompay-datadog"},
+    {name = "Lorenzo", github = "enzowritescode"},
+    {name = "Sammy", github = "Sammy-Tbeile-okcupid"}
 ]
 license = {file = "LICENSE.md"}
 readme = "README.md"
