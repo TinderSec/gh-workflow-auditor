@@ -12,7 +12,7 @@ GitHub Workflow Auditor identifies vulnerability in GitHub Workflows. It does so
 ## Usage
 
 ```
-usage: ghwfauditor [-h] [--endpoint ENDPOINT] [--token TOKEN] [--log-level {debug,info,warning,error,critical}] [--type {repo,org,user}] input
+usage: ghwfauditor [-h] [--endpoint ENDPOINT] [--log-level {debug,info,warning,error,critical}] [--type {repo,org,user}] input
 
 Identify vulnerabilities in GitHub Actions workflow.
 
@@ -22,7 +22,6 @@ positional arguments:
 options:
   -h, --help            show this help message and exit.
   --endpoint ENDPOINT   GitHub endpoint to use.
-  --token TOKEN         GitHub token. Can be provided with environment variable GITHUB_TOKEN.
   --log-level {debug,info,warning,error,critical}
                         Level of debug you wish to display.
   --type {repo,org,user}
@@ -49,7 +48,7 @@ pip install 'ghwfauditor@git+https://github.com/TinderSec/gh-workflow-auditor.gi
 ```
 
 
-GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. The program will read it from the `--token` argument or in the `GITHUB_TOKEN` environment variable. You can [generate a basic Personal Access Token](https://github.com/settings/tokens/new) without any scope. Note that you may have to "Configure SSO" for the token to be usable on some organizations.
+GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. The program will read it from the `GITHUB_TOKEN` environment variable. You can [generate a basic Personal Access Token](https://github.com/settings/tokens/new) without any scope. Note that you may have to "Configure SSO" for the token to be usable on some organizations.
 
 ```
 export GITHUB_TOKEN=ghp_YOUR_TOKEN

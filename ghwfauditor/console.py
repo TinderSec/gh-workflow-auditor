@@ -67,12 +67,6 @@ def run() -> None:
         help="GitHub endpoint to use.",
     )
     parser.add_argument(
-        "--token",
-        type=str,
-        default=os.environ.get("GITHUB_TOKEN", None),
-        help="GitHub token. Can be provided with environment variable GITHUB_TOKEN.",
-    )
-    parser.add_argument(
         "--log-level",
         choices=["debug", "info", "warning", "error", "critical"],
         default="info",
@@ -89,7 +83,7 @@ def run() -> None:
 
     target_type = args.type  # repo, org, or user
     target_endpoint = args.endpoint  # Instance of GitHub to audit
-    auth_token = args.token  # Token used to authenticate the audit actions
+    auth_token = os.environ.get("GITHUB_TOKEN", None)  # Token used to authenticate the audit actions
     target_input = args.input  # can be repo url, or a username for org/user
     log_level = args.log_level
 
@@ -104,7 +98,7 @@ def run() -> None:
 
     if auth_token is None:
         logger.error(
-            "No GitHub token provided with --token or the GITHUB_TOKEN environment variable. Exiting."
+            "No GitHub token provided with the GITHUB_TOKEN environment variable. Exiting."
         )
         sys.exit()
 
