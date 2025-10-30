@@ -1,6 +1,6 @@
-def return_query(query_type,name,after=None):
-    if query_type == 'repository':
-        owner,name = name.split('/')
+def return_query(query_type, name, after=None):
+    if query_type == "repository":
+        owner, name = name.split("/")
         return f"""query {{
                     repository(owner: "{owner}",name: "{name}") {{
                         nameWithOwner
@@ -20,10 +20,10 @@ def return_query(query_type,name,after=None):
                     }}
         }}"""
     else:
-        after_query = f",after:\"{after}\"" if after else ""
+        after_query = f',after:"{after}"' if after else ""
         return f"""query {{
         {query_type}(login:"{name}"){{
-            repositories(first:100 {after_query}){{
+            repositories(first:25 {after_query}){{
             edges{{
                 node{{
                 nameWithOwner,
@@ -51,6 +51,7 @@ def return_query(query_type,name,after=None):
         }}
         }}"""
 
+
 def validation_query(username, guess_type):
     return f"""query {{ 
                 {guess_type}(login:"{username}"){{
@@ -63,3 +64,4 @@ def validation_query(username, guess_type):
                     }}
                 }}
             }}"""
+

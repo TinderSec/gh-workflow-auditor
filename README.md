@@ -3,38 +3,54 @@
 </p>
 
 # GitHub Workflow Auditor
+
 Workflow auditing tools to identify security issues in GitHub workflows
 
-# Usage
+## Description
+GitHub Workflow Auditor identifies vulnerability in GitHub Workflows. It does so by scanning the workflow files for anti-patterns such as ingesting user inputs in an unsafe manner or using malicious commits in build process. The tool supports scanning individual repositories or all accessibe repositories of a user or organization. The output of the scan is saved as `scan.log`.
+
+## Usage
 
 ```
-usage: main.py [-h] [--type {repo,org,user}] [--log-level {debug,info,warning,error,critical}] input
+usage: ghwfauditor [-h] [--endpoint ENDPOINT] [--log-level {debug,info,warning,error,critical}] [--type {repo,org,user}] input
 
-Identify vulnerabilities in GitHub Actions workflow
+Identify vulnerabilities in GitHub Actions workflow.
 
 positional arguments:
-  input                 User/Org Name or Repo name (owner/repo).
+  input                 Organization, repository or user name.
 
-optional arguments:
-  -h, --help            show this help message and exit
+options:
+  -h, --help            show this help message and exit.
+  --endpoint ENDPOINT   GitHub endpoint to use.
+  --log-level {debug,info,warning,error,critical}
+                        Level of debug you wish to display.
   --type {repo,org,user}
                         Type of entity that is being scanned.
-  --log-level {debug,info,warning,error,critical}
-                        Log level for output
 ```
 
-Example:
-* org - `python3 main.py --type org google`
-* user - `python3 main.py --type user test_user`
-* repo: `python3 main.py --type repo TinderSec/gh-workflow-auditor`
+### Examples
 
-# Setup
+* org - `ghwfauditor --type org google`
+* user - `ghwfauditor --type user test_user`
+* repo - `ghwfauditor --type repo TinderSec/gh-workflow-auditor`
+* enterprise instance - `ghwfauditor --endpoint https://github.tinder.com --type user test_user`
 
-GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. The program will read it from the `PAT` environment variable. You can generate a basic PAT token (https://github.com/settings/tokens/new) without any scope. Note that you may have to "Configure SSO" for the token to be usable on some organizations.
+## Setup
+
+> :information_source: We recommend using `pipx` over `pip` for system-wide installations.
+
+```shell
+pipx install 'git+https://github.com/TinderSec/gh-workflow-auditor.git'
+```
+
+```shell
+pip install 'ghwfauditor@git+https://github.com/TinderSec/gh-workflow-auditor.git'
+```
+
+
+GitHub Workflow Auditor uses GitHub's GraphQL endoint. Due to this, an API token is required. The program will read it from the `GITHUB_TOKEN` environment variable. You can [generate a basic Personal Access Token](https://github.com/settings/tokens/new) without any scope. Note that you may have to "Configure SSO" for the token to be usable on some organizations.
 
 ```
-export PAT=ghp_YOUR_TOKEN
+export GITHUB_TOKEN=ghp_YOUR_TOKEN
 ```
 
-# About
-GitHub Workflow Auditor identifies vulnerability in GitHub Workflows. It does so by scanning the workflow files for anti-patterns such as ingesting user inputs in an unsafe manner or using malicious commits in build process. The tool supports scanning individual repositories or all accessibe repositories of a user or organization. The output of the scan is saved as `scan.log`.
